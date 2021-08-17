@@ -20,6 +20,7 @@ $(window).ready(function () {
     })
 
     $(document).mousemove(function (e) {
+        offset = $whiteboard.offset()
         if ($hold) {
             $hold.css({left: e.pageX - offset.left, top: e.pageY - offset.top})
         }
