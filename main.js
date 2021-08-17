@@ -1,28 +1,34 @@
+let $whiteboard = null
+let $notes = null
 let $newNote = null
 
-$(window).ready(function () {
-    const $whiteboard = $('.whiteboard')
-    let $hold = null
-    let $newNote = $('<div class="note new hidden">hi</div>')
-    let offset = $whiteboard.offset()
 
-    console.log(offset)
+$(window).ready(function () {
+    $whiteboard = $('.whiteboard')
+    $notes = $('.notes')
 
     $whiteboard.click(function () {
-        console.log('clicked')
-        $whiteboard.append($newNote)
-        if ($hold) {
-            $hold.removeClass('new')
+        if ($newNote == null) {
+            $newNote = $(`<div class="note new hidden">hi</div>`)
+            $notes.append($newNote)
+            setTimeout(() => {
+                $newNote.removeClass('hidden')
+            }, 100);
+        } else {
+            $newNote.removeClass('new')
+            $newNote.click(function () {
+                console.log('wow!')
+            })
+            $newNote = null;
         }
-        $newNote.removeClass('hidden')
-        $hold = $newNote
-        $newNote = $(`<div class="note new hidden">hi</div>`)
     })
 
     $(document).mousemove(function (e) {
-        offset = $whiteboard.offset()
-        if ($hold) {
-            $hold.css({left: e.pageX - offset.left, top: e.pageY - offset.top})
+        if ($newNote) {
+            const offset = $whiteboard.offset()
+            const [w, h] = [$newNote.width(), $newNote.height()]
+            $newNote.css({ left: e.pageX - offset.left - w / 2, top: e.pageY - offset.top + h / 2})
         }
     })
+
 })
