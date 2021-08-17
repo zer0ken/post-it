@@ -28,9 +28,14 @@ body {
     width: 6rem;
     height: 6rem;
     position: relative;
-    left: 12rem;
-    top: 2rem;
-    transition: all .4s ease;
+    transition-property: scale box-shadow;
+    transition: .3s ease;
+    margin-top: -6rem;
+    box-shadow: 0 0 .2rem rgba(0, 0, 0, .6);
+}
+
+.note.hidden {
+    scale: 0.1;
 }
 
 .note:hover {
