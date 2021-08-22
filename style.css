@@ -15,7 +15,7 @@ body {
     align-items: center;
 }
 
-.whiteboard {
+#whiteboard {
     background-color: green;
     width: 60rem;
     height: 40rem;
@@ -23,23 +23,28 @@ body {
     cursor: pointer;
 }
 
+#whiteboard:hover {
+    background-color: red;
+}
+
 .notes {
     display: inline;
 }
 
 .note {
-    overflow: hidden;
     background-color: yellow;
     width: 6rem;
     height: 6rem;
-    position: absolute;
+    position: relative;
     left: 0;
     right: 0;
-    transition-property: scale box-shadow;
-    transition: .3s ease;
-    margin-top: -6rem;
+    margin-bottom: -6rem;
     box-shadow: 0 0 .2rem rgba(0, 0, 0, .6);
     padding: .4rem;
+
+    transform: translateX(-50%) translateY(-10%);
+
+    transition: all .5 ease;
 }
 
 .note.hidden {
@@ -49,10 +54,6 @@ body {
 .note.new {
     scale: 1.1;
     box-shadow: 0 0 .8rem rgba(0, 0, 0, .6);
-}
-
-.whiteboard:not(:hover) ~ .notes .note.new {
-    width: 12rem;
-    height: 12rem;
-    margin-top: -12rem;
+    transform: translateX(-50%) translateY(-120%);
+    pointer-events: none;
 }

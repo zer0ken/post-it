@@ -1,34 +1,30 @@
-let $whiteboard = null
-let $notes = null
-let $newNote = null
-
+let $note = null
 
 $(window).ready(function () {
-    $whiteboard = $('.whiteboard')
-    $notes = $('.notes')
-
-    $whiteboard.click(function () {
-        if ($newNote == null) {
-            $newNote = $(`<div class="note new hidden">hi</div>`)
-            $notes.append($newNote)
-            setTimeout(() => {
-                $newNote.removeClass('hidden')
-            }, 100);
+    $('#whiteboard').click(function (e) {
+        console.log('board click')
+        if ($note) {
+            $note.removeClass('new')
+            $note = null
         } else {
-            $newNote.removeClass('new')
-            $newNote.click(function () {
-                console.log('wow!')
-            })
-            $newNote = null;
+            $note = $('<div class="note new"></div>').appendTo('#whiteboard').click(noteClick)
         }
     })
+
+    function noteClick(e) {
+        console.log('note click')
+        if ($note) {
+            $note.removeClass('new')
+            $note = null
+        } else {
+            $note = $('<div class="note new"></div>').appendTo('#whiteboard')
+        }
+        e.stopPropagation()
+    }
 
     $(document).mousemove(function (e) {
-        if ($newNote) {
-            const offset = $whiteboard.offset()
-            const [w, h] = [$newNote.width(), $newNote.height()]
-            $newNote.css({ left: e.pageX - offset.left - w / 2, top: e.pageY - offset.top + h / 2})
-        }
+        if (!$note) return
+        const parent = $('#whiteboard').offset()
+        $note.css({ left: e.pageX - parent.left, top: e.pageY - parent.top })
     })
-
 })
