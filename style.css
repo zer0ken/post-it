@@ -1,56 +1,14 @@
-:root {
-    font-size: 62.5%;
-}
-
 * {
+    outline: 0;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
-body {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
+html, body, canvas {
+    width: 100%;
+    height: 100%;
 }
 
-#whiteboard {
-    background-color: green;
-    width: 60rem;
-    height: 40rem;
-    margin: 0 auto;
-    cursor: pointer;
-}
-
-#whiteboard:hover {
-    background-color: red;
-}
-
-.notes {
-    display: inline;
-}
-
-.note {
-    background-color: yellow;
-    width: 6rem;
-    height: 6rem;
-    position: relative;
-    margin-bottom: -6rem;
-    box-shadow: 0 0 .2rem rgba(0, 0, 0, .6);
-    padding: .4rem;
-
-    transform: translateX(-50%) translateY(-10%);
-    transition: transform .4s ease, scale .4s ease;
-}
-
-.note.hidden {
-    scale: 0;
-}
-
-.note.new {
-    scale: 1.1;
-    box-shadow: 0 0 .8rem rgba(0, 0, 0, .6);
-    transform: translateX(-50%) translateY(-120%);
-    pointer-events: none;
-}
+canvas {
+    background: rgb(160, 255, 156);
+} 
