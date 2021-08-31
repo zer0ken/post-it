@@ -1,90 +1,47 @@
 import { Point } from "./point.js";
 
-const FOLLLOW_SPEED = 0.08
-const ROTATE_SPEED = 0.12
-const SPEED_REDUCE = 0.8
-const MAX_ANGLE = 30
-const FPS = 1000 / 60
-const WIDTH = 160
-const HEIGHT = 160
+const FPS = 60 / 1000
+const NOTE_WIDTH = 200
+const NOTE_HEIGHT = NOTE_WIDTH
+const STICKER_HEIGHT = 60
 
 export class Note {
-    constructor() {
-        this.pos = new Point()
-        this.target = new Point()
-        this.prevPos = new Point()
-        this.downPos = new Point()
-        this.speedPos = new Point()
-        this.startPos = new Point()
-        this.mousePos = new Point()
-        this.centerPos = new Point()
-        this.origin = new Point()
-        this.rotation = 0
-        this.sideValue = 0
-        this.isDown = false
+    constructor(x, y) {
+        this.pos = new Point(x, y)
+        this.target = new Point(x, y)
+        this.grab = new Point()
     }
 
     resize(stageWidth, stageHeight) {
-        this.pos.x = Math.random() * (stageWidth - WIDTH)
-        this.pos.y = Math.random() * (stageHeight - HEIGHT)
-        this.target = this.pos.clone()
-        this.prevPos = this.pos.clone()
     }
 
     animate(ctx) {
-        const move = this.target.clone().sub(this.pos).reduce(FOLLLOW_SPEED)
-        this.pos.add(move)
-
-        this.centerPos = this.pos.clone().add(this.mousePos)
-
-        this.swing(ctx)
-        this.prevPos = this.pos.clone()
-    }
-
-    swing(ctx) {
-        const dx = this.pos.x - this.prevPos.x
-        const speedX = Math.abs(dx) / FPS
-        const speed = Math.min(Math.max(speedX, 0), 1)
-
-        let rotation = (MAX_ANGLE / 1) * speed
-        rotation = rotation * (dx > 0 ? 1 : -1) - this.sideValue
-        this.rotation += (rotation - this.rotation) * ROTATE_SPEED
-
-        const tempPos = this.pos.clone().add(this.origin)
-
-        ctx.save()
-        ctx.translate(tempPos.x, tempPos.y)
-        ctx.rotate(this.rotation * Math.PI / 180)
         ctx.beginPath()
-        ctx.fillStyle = '#f4e55a'
-        ctx.fillRect(-this.origin.x, -this.origin.y, WIDTH, HEIGHT)
-        ctx.restore()
+        ctx.fillStyle = 'rgb(255, 228, 109)'
+        ctx.fillRect(this.pos.x, this.pos.y, NOTE_WIDTH, NOTE_HEIGHT)
+
+        ctx.beginPath()
+        ctx.fillStyle = '#fff'
+        ctx.arc(this.grab.x, this.grab.y, 5, 0, Math.PI * 2)
+        ctx.fill()
+
+        ctx.beginPath()
+        ctx.fillStyle = '#f00'
+        ctx.arc(this.target.x, this.target.y, 5, 0, Math.PI * 2)
+        ctx.fill()
     }
 
-    down(point) {
-        if (point.collide(this.pos, WIDTH, HEIGHT)) {
-            this.isDown = true
-            this.startPos = this.pos.clone()
-            this.downPos = point.clone()
-            this.mousePos = point.clone().sub(this.pos)
-
-            const xRatio = this.mousePos.x / WIDTH
-            this.origin.x = WIDTH * xRatio
-            this.origin.y = HEIGHT * this.mousePos.y / HEIGHT
-            this.sideValue = xRatio - .5
-            return this
-        } else {
-            return null
-        }
+    isCollide(point) {
+        return point.x >= this.pos.x
+            && point.x <= this.pos.x + NOTE_WIDTH
+            && point.y >= this.pos.y
+            && point.y <= this.pos.y + NOTE_HEIGHT
     }
 
-    move(point) {
-        if (this.isDown) {
-            this.target = this.startPos.clone().add(point).sub(this.downPos)
-        }
-    }
-
-    up() {
-        this.isDown = false
+    isBaseOf(note) {
+        return this.isCollide(note.pos)
+            || this.isCollide(new Point(note.pos.x + NOTE_WIDTH, note.pos.y))
+            || this.isCollide(new Point(note.pos.x, note.pos.y + STICKER_HEIGHT))
+            || this.isCollide(new Point(note.pos.x + NOTE_WIDTH, note.pos.y + STICKER_HEIGHT))
     }
 }

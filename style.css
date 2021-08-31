@@ -10,5 +10,6 @@ html, body, canvas {
 }
 
 canvas {
-    background: rgb(0, 132, 255);
-} 
+    background: rgb(73, 105, 248);
+    /* background: rgb(255, 228, 109); */
+}

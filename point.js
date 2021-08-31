@@ -5,28 +5,24 @@ export class Point {
     }
 
     add(point) {
-        this.x += point.x
-        this.y += point.y
-        return this
+        const result = this.clone()
+        result.x += point.x
+        result.y += point.y
+        return result
     }
 
     sub(point) {
-        this.x -= point.x
-        this.y -= point.y
-        return this
+        const result = this.clone()
+        result.x -= point.x
+        result.y -= point.y
+        return result
     }
 
-    reduce(value) {
-        this.x *= value
-        this.y *= value
-        return this
-    }
-
-    collide(point, width, height) {
-        return this.x >= point.x
-            && this.x <= point.x + width
-            && this.y >= point.y
-            && this.y <= point.y + height
+    mul(value) {
+        const result = this.clone()
+        result.x *= value
+        result.y *= value
+        return result
     }
 
     clone() {
