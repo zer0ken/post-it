@@ -1,4 +1,4 @@
-import { Note } from "./note.js"
+import { Note, HALF_WIDTH , HALF_HEIGHT } from "./note.js"
 import { Point } from "./point.js"
 
 class App {
@@ -8,6 +8,12 @@ class App {
 
         this.pixelRatio = window.devicePixelRatio > 1 ? 2 : 1
         this.ctx = this.canvas.getContext('2d')
+        this.ctx.initializeShadow = () => {
+            this.ctx.shadowOffsetX = 0
+            this.ctx.shadowOffsetY = 3
+            this.ctx.shadowBlur = 6
+            this.ctx.shadowColor = 'rgba(0, 0, 0, .2)'
+        }
 
         this.notes = []
         this.selected = null
@@ -29,11 +35,12 @@ class App {
         this.canvas.width = this.stageWidth
         this.canvas.height = this.stageHeight
         this.ctx.scale(this.pixelRatio, this.pixelRatio)
+    
+        this.ctx.initializeShadow()
 
-        this.ctx.shadowOffsetX = 0
-        this.ctx.shadowOffsetY = 3
-        this.ctx.shadowBlur = 6
-        this.ctx.shadowColor = 'rgba(0, 0, 0, .1)'
+        this.notes.forEach(note => {
+            note.resize(this.stageWidth, this.stageHeight)
+        });
     }
 
     animate() {
@@ -56,10 +63,13 @@ class App {
             }
         }
         if (!this.selected) {
-            this.selected = new Note(e.clientX, e.clientY)
+            this.selected = new Note(e.clientX - HALF_WIDTH, e.clientY - HALF_HEIGHT)
         }
         this.notes.push(this.selected)
         this.selected.grab = this.downPos
+        this.selected.target.x = e.clientX
+        this.selected.target.y = e.clientY
+        this.selected.isDown = true
     }
 
     onMove(e) {
@@ -71,6 +81,7 @@ class App {
 
     onUp(e) {
         this.isDown = false
+        this.selected.isDown = false
         this.selected = null
     }
 }
