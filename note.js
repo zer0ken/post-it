@@ -23,8 +23,8 @@ export class Note {
     resize(stageWidth, stageHeight) {
         this.grab.x = this.pos.x + HALF_WIDTH
         this.grab.y = this.pos.y + HALF_HEIGHT
-        this.target.x = Math.max(Math.min(stageWidth - NOTE_WIDTH, this.pos.x), 0) + halfX
-        this.target.y = Math.max(Math.min(stageHeight - NOTE_HEIGHT, this.pos.y), 0) + halfY
+        this.target.x = Math.max(Math.min(stageWidth - NOTE_WIDTH, this.pos.x), 0) + HALF_WIDTH
+        this.target.y = Math.max(Math.min(stageHeight - NOTE_HEIGHT, this.pos.y), 0) + HALF_HEIGHT
     }
 
     animate(ctx) {
